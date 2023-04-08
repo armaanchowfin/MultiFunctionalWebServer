@@ -45,16 +45,18 @@ Each client process, on initialisation spawns 2 threads: ```serverresponsehandle
 - ```clientinputhandler``` gets input from user terminal and sends it to the server for further processing.
 
 ### Server-Side User's List:
- - Each connected client is stored as a node in a Doubly-linked list of Client structs. 
+ - Each connected client is stored as a node in a Doubly-linked list of DLLNode structs.
+ - Each node contains thread-local client details.
+ - DLL Nodes are accessed instead of multiple File I/O operations to implement ```LIST```.
 
 
 ### Function Details:
 
 
 ## Drawbacks
-No performance testing/optimizations done as yet. 
-Program is not entirely thread-safe yet. Scalability is a concern and will likely lead to the discovery of concurrency bugs.
-
+- No performance testing/optimizations done as yet. 
+- Program is not entirely thread-safe yet. Scalability is a concern and will likely lead to the discovery of concurrency bugs.
+- Error checking not yet implemented for most functions.
 
 
 

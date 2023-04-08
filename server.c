@@ -23,11 +23,11 @@ all the string processing (EXIT/LIST), username etc are stored and sent to serve
 */
 
 #define _GNU_SOURCE
-#define MAXCLIENTS 3
 #include "server.h"
 
 pthread_mutex_t filemutex;
 pthread_mutex_t exitmutex;
+pthread_mutex_t listmutex;
 
 int num_conn = 0;
 
@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     pthread_t s_threads[MAXCLIENTS];
     pthread_mutex_init(&filemutex, NULL);
     pthread_mutex_init(&exitmutex, NULL);
+    pthread_mutex_init(&listmutex, NULL);
 
     int serverlisten_sockfd = startserver(s_serveraddr);
     printf("Server Socket fd: %d\n", serverlisten_sockfd);
@@ -87,6 +88,7 @@ int main(int argc, char *argv[])
 
     pthread_mutex_destroy(&filemutex);
     pthread_mutex_destroy(&exitmutex);
+    pthread_mutex_destroy(&listmutex);
 }
 
 /*Tasks:
@@ -131,12 +133,15 @@ void *s_clienthandler(void *_thisconn){
         recpacket(recpack, mysockfd); //populates recpkt fields.
         enum MessageType mtype = recpack->mtype; //
         char *args = recpack->msg_args; //Client list.
+        printf("mytpe: %d\n", mtype);
+        printf("args: %sx\n", args);
 
         switch(mtype){
 
         case LIST:
-        //mutex
-            //doList();
+        pthread_mutex_lock(&listmutex);
+            doList();
+        pthread_mutex_unlock(&listmutex);
             break;
 
         case EXIT:
@@ -205,11 +210,10 @@ void doDown(char *filename){
 
 char *doList(void){
     //struct DLLNode *head global.
-//     struct DLLNode *current = head;
-//     while(current !=NULL){
-        
-//     }
-        
+    puts("list");
+    char *users = getDLLNodes();
+    printf("Users: %s\n", users);
+    return users;   
 }
 void doExit(struct DLLNode *thisconn){
 

@@ -88,7 +88,7 @@ void removeUserByName(char *_clientname){
 }
 
 char *getDLLNodes(){
-	char *users = (char *)malloc(100 *);
+	char *users = (char *)malloc(100 * MAXCLIENTS);
 	struct DLLNode *curr = head;
 	int i = 0;
 	while(curr != NULL){

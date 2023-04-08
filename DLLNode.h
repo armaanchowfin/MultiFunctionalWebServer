@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAXCLIENTS 3
 
 struct ClientState{
     char clientname[100]; //filled after recv initpacket
@@ -24,6 +25,7 @@ struct DLLNode{
 struct DLLNode *createUser(int sockfd);
 struct DLLNode *addUser(int sockfd);
 struct DLLNode *findUserByName(char *name);
+char *getDLLNodes(void);
 void removeUserByName(char *name);
 
 #endif

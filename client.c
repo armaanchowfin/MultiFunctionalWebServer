@@ -109,8 +109,10 @@ void *c_clientinputhandler(void *){
         fgets(rawinput, sizeof(rawinput), stdin);
         //rawinput[strcspn(rawinput, "\n")] = 0;
         struct packet thismsgpkt = makemessagepkt(rawinput);//message type filled
+        printf("msg type: %d", thismsgpkt.mtype);
         thismsgpkt.isChatAuth = thisclientstate.inchat;
-        sendpacket(thismsgpkt, mysockfd);
+        int sent = sendpacket(thismsgpkt, mysockfd);
+        printf("sent: %d\n", sent);
     } 
 }
 
